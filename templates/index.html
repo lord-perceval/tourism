@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tourist Spots Finder</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <h1>Tourist Spots Finder</h1>
+    <div id="search-container">
+        <input type="text" id="location" placeholder="Enter location..." />
+        <button onclick="showLocation()">Show Location</button>
+        <button onclick="findSpots()">Find Spots</button>
+    </div>
+    <div id="map"></div>
+    <ul id="spots"></ul>
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC6JXdrY5SNL31rPWL1RUrln15ymEolLWQ&libraries=places&callback=initAutocomplete" async defer></script>
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
