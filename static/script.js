@@ -46,7 +46,7 @@ function showLocation() {
             alert(data.error);
         } else {
             const lat = parseFloat(data.lat);
-            const lon = parseFloat(data.lon);
+            const lon = parseFloat(data.lng);
 
             map.setView([lat, lon], 13); // Zoom to the specified location
 
@@ -59,31 +59,10 @@ function showLocation() {
     });
 }
 
-// Find tourist spots near the selected location
+// Find tourist spots near the selected location and open a new page
 function findSpots() {
     const location = document.getElementById('location').value;
-    fetch('/get_spots', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ location })
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.error) {
-            alert(data.error);
-        } else {
-            const spots = data.spots;
-            const spotsList = document.getElementById('spots');
-            spotsList.innerHTML = '';
-            spots.forEach(spot => {
-                const li = document.createElement('li');
-                li.textContent = spot;
-                spotsList.appendChild(li);
-            });
-        }
-    });
+    window.location.href = `/spots?location=${encodeURIComponent(location)}`;
 }
 
 // Initialize the map and autocomplete once the page is fully loaded

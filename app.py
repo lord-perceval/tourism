@@ -1,4 +1,4 @@
-from flask import Flask, request, render_template, jsonify
+from flask import Flask, request, render_template, jsonify, redirect, url_for
 import requests
 
 app = Flask(__name__)
@@ -17,25 +17,37 @@ def get_tourist_spots(lat, lng):
     url = f"https://maps.googleapis.com/maps/api/place/nearbysearch/json?location={lat},{lng}&radius=5000&type=tourist_attraction&key={API_KEY}"
     response = requests.get(url).json()
     if response['status'] == 'OK':
-        return [place['name'] for place in response['results']]
+        spots = []
+        for place in response['results']:
+            spot = {
+                'name': place['name'],
+                'image': place['photos'][0]['photo_reference'] if 'photos' in place else None
+            }
+            spots.append(spot)
+        return spots
     else:
         return []
+
+def get_image_url(photo_reference):
+    return f"https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference={photo_reference}&key={API_KEY}"
 
 @app.route('/')
 def index():
     return render_template('index.html')
 
-@app.route('/get_spots', methods=['POST'])
-def get_spots():
-    data = request.json
-    location = data['location']
+@app.route('/spots')
+def spots():
+    location = request.args.get('location')
     coords = get_coordinates(location)
     if coords:
         lat, lng = coords['lat'], coords['lng']
         spots = get_tourist_spots(lat, lng)
-        return jsonify({'lat': lat, 'lng': lng, 'spots': spots})
+        for spot in spots:
+            if spot['image']:
+                spot['image_url'] = get_image_url(spot['image'])
+        return render_template('spots.html', location=location, spots=spots)
     else:
-        return jsonify({'error': 'Location not found'}), 404
+        return render_template('error.html', message='Location not found')
 
 if __name__ == '__main__':
     app.run(debug=True)

@@ -68,3 +68,28 @@ button:hover {
 #spots li:last-child {
     border-bottom: none;
 }
+
+#spots-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.spot {
+    margin: 10px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: #fff;
+    text-align: center;
+}
+
+.spot img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 4px;
+}
+
+.spot p {
+    margin: 10px 0 0;
+}
